@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<form method='POST' enctype="multipart/form-data">
+{% csrf_token %}
+{% if form.errors %}
+{{ form.errors }}
+<hr class="b-hr">
+{% endif %}
+{{ form }}
+<input type='submit' value='Submit'/>
+</form>
+<p>{{ link }}</p>
+</body>
+</html>
