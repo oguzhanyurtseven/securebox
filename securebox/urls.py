@@ -18,4 +18,6 @@ urlpatterns = patterns('',
     url(r'^send_mail/$', 'securebox.views.send_mail'),
     url(r'^public_key_page/(.+)/$', 'securebox.views.public_key_page'),
     url(r'^decrypt_page/$', 'securebox.views.decrypt_page_input'),
+    url(r'^index/$', 'securebox.views.index'),
+
 ) + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

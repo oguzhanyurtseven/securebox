@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import base64
-from binascii import hexlify
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from securebox.forms import new_user_form, send_mail_form, decrypt_page_input_form
 from django.contrib.auth.models import User
+from securebox.forms import new_user_form, send_mail_form, decrypt_page_input_form
+
 from securebox.hashids import *
 from securebox.mailgun import mailgun
-from random import choice
-import string
-from models import message
+from securebox.models import message
+
+
 __author__ = 'oguzhan'
 
 
@@ -21,10 +20,10 @@ def home_page(request):
 
     return render_to_response('main_page.html', locals(), context_instance=RequestContext(request))
 
-def new_user(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('/')
+def index(request):
 
+    return render_to_response('index.html', locals(), context_instance=RequestContext(request))
+def new_user(request):
     form = new_user_form
     if request.method == 'POST':
         form = new_user_form(request.POST)
@@ -95,3 +94,8 @@ def decrypt_page_input(request):
             link = 'http://127.0.0.1:8000' + file_obj.file.url
 
     return render_to_response('decrypt_page_input.html', locals(), context_instance=RequestContext(request))
+
+def my_uploads(request):
+    uploaded_files = file.objects.all()
+    return render_to_response('my_uploads.html', locals())
+

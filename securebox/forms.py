@@ -8,6 +8,7 @@ class new_user_form(forms.Form):
     password = forms.CharField(max_length=50, widget=forms.PasswordInput())
     email = forms.CharField(max_length=150)
 
+
 class send_mail_form(forms.ModelForm):
     class Meta:
         model = message
@@ -18,3 +19,5 @@ class send_mail_form(forms.ModelForm):
 class decrypt_page_input_form(forms.Form):
     salt = forms.CharField(max_length=50)
     message = forms.CharField(max_length=1000)
+
+
