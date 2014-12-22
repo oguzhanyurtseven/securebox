@@ -21,8 +21,36 @@ def home_page(request):
     return render_to_response('main_page.html', locals(), context_instance=RequestContext(request))
 
 def index(request):
+    salt_key = ''
+    try:
+        user = request.user
+    except:
+        return HttpResponseRedirect('/404')
+    form = send_mail_form(initial={'user': user})
+    if request.method == 'POST':
+        form = send_mail_form(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                to_email = request.POST.get('to_email')
+                title = request.POST.get('title')
+                salt = request.POST.get('salt')
+                message_text = request.POST.get('message')
+                attachment = request.FILES.get('file')
 
+                message_obj = message(user=request.user, title=title, message='', to_email=to_email, salt=salt, file=attachment)
+                message_obj.save()
+
+                hashids = Hashids(salt=salt)
+                hashid = hashids.encrypt(message_obj.id)
+                text = message_text + ' hashid:' + str(hashid)
+                mailgun_operator = mailgun()
+                mailgun_operator.send_mail(user.email, to_email, title, str(hashid))
+                salt_key = salt
+            except:
+                return HttpResponseRedirect('/404')
     return render_to_response('index.html', locals(), context_instance=RequestContext(request))
+
+
 def new_user(request):
     form = new_user_form
     if request.method == 'POST':
@@ -39,38 +67,38 @@ def new_user(request):
                 print e
     return render_to_response('new_user.html', {'form': form}, context_instance=RequestContext(request))
 
-@login_required
-def send_mail(request):
-    try:
-        user = request.user
-    except:
-        return HttpResponseRedirect('/404')
-    form = send_mail_form(initial={'user': user})
-    if request.method == 'POST':
-        form = send_mail_form(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                to_email = request.POST.get('to_email')
-                title = request.POST.get('title')
-                salt = request.POST.get('salt')
-                attachment = request.FILES.get('file')
+# @login_required
+# def send_mail(request):
+#     try:
+#         user = request.user
+#     except:
+#         return HttpResponseRedirect('/404')
+#     form = send_mail_form(initial={'user': user})
+#     if request.method == 'POST':
+#         form = send_mail_form(request.POST, request.FILES)
+#         if form.is_valid():
+#             try:
+#                 to_email = request.POST.get('to_email')
+#                 title = request.POST.get('title')
+#                 salt = request.POST.get('salt')
+#                 attachment = request.FILES.get('file')
+#
+#                 message_obj = message(user=request.user, title=title, message='', to_email=to_email, salt=salt, file=attachment)
+#                 message_obj.save()
+#
+#                 hashids = Hashids(salt=salt)
+#                 hashid = hashids.encrypt(message_obj.id)
+#                 mailgun_operator = mailgun()
+#                 mailgun_operator.send_mail(user.email, to_email, title, str(hashid))
+#                 return HttpResponseRedirect('/public_key_page/' + salt)
+#             except:
+#                 return HttpResponseRedirect('/404')
+#     return render_to_response('send_message.html', locals(), context_instance=RequestContext(request))
 
-                message_obj = message(user=request.user, title=title, message='', to_email=to_email, salt=salt, file=attachment)
-                message_obj.save()
-
-                hashids = Hashids(salt=salt)
-                hashid = hashids.encrypt(message_obj.id)
-                mailgun_operator = mailgun()
-                mailgun_operator.send_mail(user.email, to_email, title, str(hashid))
-                return HttpResponseRedirect('/public_key_page/' + salt)
-            except:
-                return HttpResponseRedirect('/404')
-    return render_to_response('send_message.html', locals(), context_instance=RequestContext(request))
-
-@login_required
-def public_key_page(request, salt):
-    salt = salt
-    return render_to_response('public_key_page.html', locals(), context_instance=RequestContext(request))
+# @login_required
+# def public_key_page(request, salt):
+#     salt = salt
+#     return render_to_response('public_key_page.html', locals(), context_instance=RequestContext(request))
 
 @login_required
 def decrypt_page_input(request):
@@ -96,6 +124,11 @@ def decrypt_page_input(request):
     return render_to_response('decrypt_page_input.html', locals(), context_instance=RequestContext(request))
 
 def my_uploads(request):
-    uploaded_files = file.objects.all()
+    messages = message.objects.all()
     return render_to_response('my_uploads.html', locals())
+
+def delete_file(request, message_id):
+    message_item = message.objects.filter(id=message_id)[0]
+    message_item.delete()
+    return HttpResponseRedirect('/my_uploads')
 

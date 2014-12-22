@@ -19,5 +19,7 @@ urlpatterns = patterns('',
     url(r'^public_key_page/(.+)/$', 'securebox.views.public_key_page'),
     url(r'^decrypt_page/$', 'securebox.views.decrypt_page_input'),
     url(r'^index/$', 'securebox.views.index'),
+    url(r'^my_uploads/$', 'securebox.views.my_uploads'),
+    url(r'^delete_file/(.+)$', 'securebox.views.delete_file'),
 
 ) + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
