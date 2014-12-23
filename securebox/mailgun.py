@@ -3,8 +3,8 @@ __author__ = 'cemkiy'
 import requests
 class mailgun:
     def __init__(self):
-        self.key = 'key-2361ddc59bfd7a45df0acdac47b84390'
-        self.sandbox = 'sandboxe1e55da3f7a7423ba6d16a58c3ffbee8.mailgun.org'
+        self.key = 'your mailgun key---'
+        self.sandbox = 'your mailgun key----'
 
     def send_mail(self, from_email, email_to, title, text):
         request_url = 'https://api.mailgun.net/v2/{0}/messages'.format(self.sandbox)
