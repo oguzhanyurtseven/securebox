@@ -11,6 +11,8 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet">
+          <link href="/static/assets/css/mini.css" rel="stylesheet">
+
     <!--external css-->
     <link href="/static/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
         
@@ -34,55 +36,25 @@
 	  <div id="login-page">
 	  	<div class="container">
 	  	
-		      <form class="form-login" action="../../" method="POST">
+		      <form class="form-login" id="new_user" method="POST">
                   {% csrf_token %}
 		        <h2 class="form-login-heading">Üye Ol</h2>
 		        <div class="login-wrap">
-		            <input type="text" class="form-control" placeholder="Kullanıcı Adı" autofocus value="{{username}}">
+		             <label  for="username">Kullanıcı Adı :</label>
+		            {{ form.username }}
 		            <br>
-		            <input type="password" class="form-control" placeholder="Parola" value="{{password}}">
+                    <label  for="password">Parola :</label>
+                    {{ form.password }}
                     <br>
-		            <input type="email" class="form-control" placeholder="Email" value="{{email}}">
-		            <label class="checkbox">{% comment %}
-		                <span class="pull-right">
-		                    <a data-toggle="modal" href="login.html#myModal"> Şifremi unuttum </a>
-		
-		                </span>{% endcomment %}
-		            </label>
-		          <button class="btn btn-theme btn-block" href="../login" style="margin-top: 15px" type="submit"><i class="fa fa-lock"></i> Kayıt Ol </button>
+                    <label  for="email">E-Posta :</label>
+                    {{ form.email }}
+		            <br>
+		          <button class="btn btn-theme btn-block" style="margin-top: 15px" type="submit"><i class="fa fa-lock"></i> Kayıt Ol </button>
 		            <hr>
 
-		          {% comment %}  <div class="registration">
-		                Üye Değilmisin ?<br/>
-		                <a class="" href="../../new_user/">
-		                    Hesap Oluştur
-		                </a>
-		            </div>{% endcomment %}
-		
-		        </div>
-		
-		          <!-- Modal -->
-		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-		              <div class="modal-dialog">
-		                  <div class="modal-content">
-		                      <div class="modal-header">
-		                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                          <h4 class="modal-title">Forgot Password ?</h4>
-		                      </div>
-		                      <div class="modal-body">
-		                          <p>Enter your e-mail address below to reset your password.</p>
-		                          <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
-		
-		                      </div>
-		                      <div class="modal-footer">
-		                          <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-		                          <button class="btn btn-theme" type="button">Submit</button>
-		                      </div>
-		                  </div>
-		              </div>
 		          </div>
-		          <!-- modal -->
 		
+
 		      </form>	  	
 	  	
 	  	</div>
